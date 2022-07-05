@@ -1,22 +1,21 @@
-<% layout('layouts/boilerplate')%> 
+<% layout('layouts/boilerplate')%>
     <h1>Campground info</h1>
 
-<h2>
-    <%= Onecampground.title %> 
-</h2>
-<h2>
-    <%= Onecampground.location %> 
-</h2>
+    <h2>
+        <%= Onecampground.title %>
+    </h2>
+    <h2>
+        <%= Onecampground.location %>
+    </h2>
 
-<footer>
-    <div>
-    <a href="/campgrounds/<%= Onecampground._id %>/edit">Edit campground</a>
-</div>
-<div>
-    <a href="/campgrounds">Go back to all campgrounds</a>
-</div>
-</footer>
-<form action="/campgrounds/<%=Onecampground._id%>?_method=delete" method="post">
-<button>Delete</button>
-</form>
-    
+    <footer>
+        <div>
+            <a href="/campgrounds/<%= Onecampground._id %>/edit">Edit campground</a>
+        </div>
+        <div>
+            <a href="/campgrounds">Go back to all campgrounds</a>
+        </div>
+    </footer>
+    <form action="/campgrounds/<%=Onecampground._id%>?_method=delete" method="post">
+        <button>Delete</button>
+    </form>
