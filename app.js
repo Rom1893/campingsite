@@ -9,9 +9,13 @@ const flash = require("connect-flash")
 const methodOverride = require("method-override");
 const { error } = require("console");
 const Review = require("./models/review");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
 
-const campgrounds = require("./routes/campgrounds");
-const reviews = require("./routes/reviews");
+const userRoutes = require("./routes/users");
+const campgroundsRoutes = require("./routes/campgrounds");
+const reviewsRoutes = require("./routes/reviews");
 const { date } = require("joi");
 
 mongoose.connect("mongodb://localhost:27017/yelp-camp", {
@@ -42,16 +46,26 @@ const sessionConfig = {
     }
 }
 app.use(session(sessionConfig));
-
 app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next()
-})
+});
 
-app.use("/campgrounds", campgrounds);
-app.use("/campgrounds/:id/reviews", reviews);
+
+app.use("/", userRoutes);
+app.use("/campgrounds", campgroundsRoutes);
+app.use("/campgrounds/:id/reviews", reviewsRoutes);
 app.use(express.static(path.join(__dirname, "public")));
 
 app.listen(3000, () => {
